@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Суши от Вани — доставка суши и роллов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --red: #E53935;
+  --red-dark: #C62828;
+  --orange: #FF7043;
+  --black: #1A1A1A;
+  --dark: #111111;
+  --gray: #f5f5f5;
+  --gray2: #ebebeb;
+  --gray3: #888;
+  --white: #ffffff;
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray); }
+::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+/* ─── HEADER ─── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  transition: box-shadow .3s;
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* Logo */
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.logo-text span:first-child { font-size: 11px; font-weight: 600; color: var(--gray3); letter-spacing: .08em; text-transform: uppercase; }
+.logo-text span:last-child { font-size: 18px; font-weight: 800; color: var(--black); letter-spacing: -.02em; }
+.logo-text span:last-child em { color: var(--red); font-style: normal; }
+
+/* Nav */
+nav { flex: 1; display: flex; align-items: center; gap: 4px; }
+nav a {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background .2s, color .2s;
+}
+nav a:hover { background: var(--gray); color: var(--red); }
+
+.header-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+
+.header-phone {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 700;
+  color: var(--black); text-decoration: none;
+}
+.header-phone i { color: var(--red); }
+
+.btn-order {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(229,57,53,0.35);
+}
+.btn-order:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(229,57,53,0.45); }
+
+/* Cart button */
+.cart-btn {
+  position: relative;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--gray);
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.cart-btn:hover { background: var(--gray2); }
+.cart-count {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--red);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  display: none;
+}
+.cart-count.visible { display: flex; animation: pop .3s ease; }
+
+@keyframes pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Burger */
+.burger { display: none; width: 36px; height: 36px; flex-direction: column; justify-content: center; align-items: center; gap: 5px; background: none; border: none; cursor: pointer; }
+.burger span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; transition: .3s; }
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile nav */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 72px; left: 0; right: 0; bottom: 0;
+  background: white;
+  z-index: 999;
+  flex-direction: column;
+  padding: 24px;
+  gap: 8px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border-bottom: 1px solid var(--gray2);
+}
+.mobile-nav a:hover { background: var(--gray); color: var(--red); }
+.mobile-nav .btn-order { margin-top: 12px; justify-content: center; }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  background: #0d0d0d;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 72px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=1800&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.45;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(10,10,10,.9) 40%, rgba(10,10,10,.3) 100%);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(229,57,53,.15);
+  border: 1px solid rgba(229,57,53,.4);
+  color: #ff8a80;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 58px);
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  margin-bottom: 20px;
+}
+
+.hero h1 span { color: var(--orange); }
+
+.hero p {
+  font-size: 17px;
+  color: rgba(255,255,255,.7);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 480px;
+}
+
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  color: white;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 24px rgba(229,57,53,.4);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(229,57,53,.5); }
+
+.btn-secondary {
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.3);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,.2); }
+
+.hero-delivery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  padding: 10px 18px;
+  border-radius: 50px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+.hero-delivery-badge i { color: var(--orange); font-size: 16px; }
+
+.hero-img-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-img-wrap {
+  position: relative;
+  width: 420px;
+  height: 420px;
+}
+
+.hero-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229,57,53,.25) 0%, transparent 70%);
+}
+
+.hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,.5);
+}
+
+.hero-float {
+  position: absolute;
+  background: white;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  font-size: 13px;
+  font-weight: 600;
+}
+.hero-float.top { top: 10px; right: -20px; }
+.hero-float.bottom { bottom: 30px; left: -30px; }
+.hero-float i { font-size: 22px; }
+.hero-float .val { font-size: 18px; font-weight: 900; color: var(--red); }
+
+/* ─── SECTION BASE ─── */
+section { padding: 80px 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(229,57,53,.1);
+  color: var(--red);
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.section-sub {
+  font-size: 16px;
+  color: var(--gray3);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* ─── CATEGORIES ─── */
+.categories { background: var(--gray); }
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.cat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .25s, box-shadow .25s;
+  box-shadow: var(--card-shadow);
+  text-decoration: none;
+  color: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.cat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--orange));
+  transform: scaleX(0);
+  transition: transform .3s;
+}
+.cat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(0,0,0,.13); }
+.cat-card:hover::after { transform: scaleX(1); }
+
+.cat-img {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  display: block;
+  border: 3px solid var(--gray2);
+}
+.cat-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+.cat-desc { font-size: 11px; color: var(--gray3); font-weight: 500; }
+
+/* ─── MENU ─── */
+.menu-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 32px 0 40px;
+}
+.menu-tab {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1.5px solid var(--gray2);
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+  color: var(--black);
+}
+.menu-tab:hover, .menu-tab.active {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 12px rgba(229,57,53,.3);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.product-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: transform .25s, box-shadow .25s;
+  position: relative;
+}
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.12); }
+
+.product-img-wrap { position: relative; overflow: hidden; height: 220px; }
+.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+.product-card:hover .product-img-wrap img { transform: scale(1.07); }
+
+.product-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.product-body { padding: 20px; }
+.product-weight { font-size: 12px; color: var(--gray3); font-weight: 600; margin-bottom: 6px; }
+.product-name { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: -.02em; }
+.product-ingr { font-size: 12px; color: var(--gray3); line-height: 1.5; margin-bottom: 16px; }
+
+.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-size: 22px; font-weight: 900; color: var(--black); }
+.product-price span { font-size: 13px; font-weight: 600; color: var(--gray3); }
+
+.btn-cart {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 12px rgba(229,57,53,.3);
+}
+.btn-cart:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(229,57,53,.4); }
+.btn-cart.added { animation: cartBounce .4s ease; }
+
+@keyframes cartBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ─── PROMOS ─── */
+.promos { background: var(--black); }
+.promos .section-title { color: white; }
+
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.promo-card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  height: 240px;
+  cursor: pointer;
+}
+.promo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+.promo-card:hover img { transform: scale(1.08); }
+
+.promo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.8) 0%, transparent 50%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.promo-tag {
+  background: var(--red);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+  width: fit-content;
+  margin-bottom: 8px;
+}
+.promo-title { font-size: 18px; font-weight: 800; color: white; line-height: 1.3; margin-bottom: 4px; }
+.promo-sub { font-size: 13px; color: rgba(255,255,255,.7); }
+
+/* ─── WHY US ─── */
+.why { background: var(--gray); }
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.why-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--card-shadow);
+  transition: transform .25s;
+}
+.why-card:hover { transform: translateY(-4px); }
+.why-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(229,57,53,.12), rgba(255,112,67,.12));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  color: var(--red);
+  margin-bottom: 18px;
+}
+.why-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+.why-card p { font-size: 13px; color: var(--gray3); line-height: 1.6; }
+
+/* ─── STATS ─── */
+.stats {
+  background: linear-gradient(135deg, var(--black), #1a1a1a);
+  padding: 64px 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.stat-item { text-align: center; }
+.stat-number {
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 900;
+  color: white;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+.stat-number span { color: var(--orange); }
+.stat-label { font-size: 14px; color: rgba(255,255,255,.5); margin-top: 8px; font-weight: 500; }
+
+/* ─── REVIEWS ─── */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.review-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+}
+.review-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 16px; right: 24px;
+  font-size: 72px;
+  color: rgba(229,57,53,.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.review-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.review-avatar {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gray2);
+}
+.review-name { font-size: 15px; font-weight: 800; }
+.stars { color: #ffc107; font-size: 13px; margin-top: 2px; }
+.review-text { font-size: 14px; color: var(--gray3); line-height: 1.7; }
+.review-date { font-size: 11px; color: var(--gray3); margin-top: 12px; }
+
+/* ─── CONTACTS ─── */
+.contacts { background: var(--gray); }
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 48px;
+}
+
+.contacts-info { display: flex; flex-direction: column; gap: 20px; }
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: white;
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+}
+.contact-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.contact-label { font-size: 11px; color: var(--gray3); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.contact-value { font-size: 15px; font-weight: 700; }
+.contact-value a { color: var(--black); text-decoration: none; }
+.contact-value a:hover { color: var(--red); }
+
+.map-placeholder {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  min-height: 360px;
+  background: #e8e8e8;
+}
+.map-placeholder img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.map-pin {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  background: var(--red);
+  color: white;
+  width: 44px; height: 44px;
+  border-radius: 50% 50% 50% 0;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(229,57,53,.4);
+}
+.map-pin i { transform: rotate(45deg); font-size: 18px; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--dark);
+  padding: 60px 0 32px;
+  color: rgba(255,255,255,.6);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+.footer-logo-col .logo-text span:last-child { color: white; }
+.footer-logo-col .logo-text span:first-child { color: rgba(255,255,255,.4); }
+.footer-logo-col p { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.7; margin-top: 16px; }
+
+.footer-col h4 { font-size: 13px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+.footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,.5); text-decoration: none; margin-bottom: 10px; transition: color .2s; }
+.footer-col a:hover { color: white; }
+
+.socials { display: flex; gap: 10px; margin-top: 16px; }
+.social-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  font-size: 15px;
+  transition: background .2s, color .2s;
+}
+.social-btn:hover { background: var(--red); color: white; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-bottom a { color: rgba(255,255,255,.4); text-decoration: none; }
+.footer-bottom a:hover { color: white; }
+
+/* ─── CART DRAWER ─── */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 1100;
+  display: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cart-overlay.open { display: block; opacity: 1; }
+
+.cart-drawer {
+  position: fixed;
+  top: 0; right: -480px;
+  width: 480px;
+  max-width: 100vw;
+  height: 100%;
+  background: white;
+  z-index: 1101;
+  transition: right .35s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+}
+.cart-drawer.open { right: 0; }
+
+.cart-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid var(--gray2);
+}
+.cart-header h3 { font-size: 20px; font-weight: 800; }
+.cart-close { width: 36px; height: 36px; border-radius: 50%; background: var(--gray); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+.cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+
+.cart-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%;
+  color: var(--gray3);
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.cart-empty i { font-size: 48px; color: var(--gray2); }
+
+.cart-item {
+  display: flex; gap: 14px; align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--gray);
+}
+.cart-item img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.cart-item-price { font-size: 15px; font-weight: 800; color: var(--red); }
+.cart-item-qty { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--gray2); background: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: .2s; }
+.qty-btn:hover { background: var(--red); border-color: var(--red); color: white; }
+.qty-num { font-size: 14px; font-weight: 700; min-width: 20px; text-align: center; }
+.remove-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: var(--gray); cursor: pointer; font-size: 12px; color: var(--gray3); transition: .2s; }
+.remove-btn:hover { background: #ffebee; color: var(--red); }
+
+.cart-footer { padding: 20px 24px; border-top: 1px solid var(--gray2); }
+.cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+.cart-total span:last-child { color: var(--red); }
+.btn-checkout {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--red), var(--orange));
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 16px rgba(229,57,53,.35);
+}
+.btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(229,57,53,.45); }
+
+/* ─── FLOAT PARTICLE ANIMATION ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.hero-img-wrap { animation: float 4s ease-in-out infinite; }
+
+/* ─── REVEAL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--black);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 2000;
+  display: flex; align-items: center; gap: 8px;
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast i { color: var(--orange); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .cat-grid { grid-template-columns: repeat(3, 1fr); }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 900px) {
+  nav { display: none; }
+  .burger { display: flex; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-img-col { display: none; }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+  .promo-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .contacts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  section { padding: 56px 0; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .products-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .promo-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .hero h1 { font-size: 28px; }
+  .header-phone { display: none; }
+  .header-inner { gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="22" fill="#E53935"/>
+        <!-- Ролл -->
+        <circle cx="22" cy="22" r="10" fill="white"/>
+        <circle cx="22" cy="22" r="6.5" fill="#E53935"/>
+        <circle cx="22" cy="22" r="3" fill="white"/>
+        <!-- Ikura dots -->
+        <circle cx="27" cy="19" r="1.4" fill="#FF7043"/>
+        <circle cx="24.5" cy="16.5" r="1.2" fill="#FF7043"/>
+        <!-- Chopsticks -->
+        <line x1="30" y1="8" x2="38" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <line x1="33" y1="6" x2="40" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <!-- Nori band -->
+        <path d="M13 22 Q22 28 31 22" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text">
+        <span>доставка</span>
+        <span>Суши от <em>Вани</em></span>
+      </div>
+    </a>
+
+    <nav>
+      <a href="#hero">Главная</a>
+      <a href="#menu">Меню</a>
+      <a href="#promos">Акции</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="tel:+78001234567" class="header-phone">
+        <i class="fas fa-phone"></i>
+        8 800 123-45-67
+      </a>
+      <button class="cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <a href="#menu" class="btn-order">
+        <i class="fas fa-utensils"></i>
+        Заказать
+      </a>
+      <button class="burger" id="burger" onclick="toggleMobile()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#hero" onclick="toggleMobile()">Главная</a>
+  <a href="#menu" onclick="toggleMobile()">Меню</a>
+  <a href="#promos" onclick="toggleMobile()">Акции</a>
+  <a href="#contacts" onclick="toggleMobile()">Доставка и контакты</a>
+  <a href="tel:+78001234567"><i class="fas fa-phone" style="margin-right:8px"></i>8 800 123-45-67</a>
+  <a href="#menu" class="btn-order" onclick="toggleMobile()"><i class="fas fa-utensils"></i>Заказать</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><i class="fas fa-fire"></i> Хит сезона — Сет Вани</div>
+      <h1>Свежие суши и роллы с <span>доставкой за 45 минут</span></h1>
+      <p>Готовим только после оформления заказа. Свежие ингредиенты и большие порции — каждый день с 10:00 до 23:00.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-primary"><i class="fas fa-utensils"></i> Заказать сейчас</a>
+        <a href="#menu" class="btn-secondary"><i class="fas fa-list"></i> Смотреть меню</a>
+      </div>
+      <div class="hero-delivery-badge">
+        <i class="fas fa-truck"></i>
+        Доставка бесплатно от 999 ₽
+      </div>
+    </div>
+
+    <div class="hero-img-col">
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80" alt="Суши">
+        <div class="hero-float top">
+          <i class="fas fa-star" style="color:#ffc107"></i>
+          <div>
+            <div class="val">4.9</div>
+            <div style="font-size:11px;color:#888">рейтинг</div>
+          </div>
+        </div>
+        <div class="hero-float bottom">
+          <i class="fas fa-clock" style="color:var(--orange)"></i>
+          <div>
+            <div class="val">45 мин</div>
+            <div style="font-size:11px;color:#888">доставка</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CATEGORIES ─── -->
+<section class="categories">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag"><i class="fas fa-th"></i> Категории</div>
+      <h2 class="section-title">Выбирайте по вкусу</h2>
+      <p class="section-sub">Свежие роллы, суши, горячие запечённые позиции и вкусные сеты на любой повод</p>
+    </div>
+    <div class="cat-grid reveal">
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=200&q=80" alt="Роллы" class="cat-img">
+        <div class="cat-name">Роллы</div>
+        <div class="cat-desc">32 вида</div>
+      </a>
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=200&q=80" alt="Запеченные" class="cat-img">
+        <div class="cat-name">Запечённые</div>
+        <div class="cat-desc">18 видов</div>
+      </a>
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?w=200&q=80" alt="Сеты" class="cat-img">
+        <div class="cat-name">Сеты</div>
+        <div class="cat-desc">8 составов</div>
+      </a>
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=200&q=80" alt="Суши" class="cat-img">
+        <div class="cat-name">Суши</div>
+        <div class="cat-desc">24 вида</div>
+      </a>
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=80" alt="Пицца" class="cat-img">
+        <div class="cat-name">Пицца</div>
+        <div class="cat-desc">12 видов</div>
+      </a>
+      <a href="#menu" class="cat-card">
+        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=200&q=80" alt="Напитки" class="cat-img">
+        <div class="cat-name">Напитки</div>
+        <div class="cat-desc">20 видов</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MENU ─── -->
+<section id="menu">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag"><i class="fas fa-fire"></i> Хиты</div>
+      <h2 class="section-title">Популярные позиции</h2>
+      <p class="section-sub">Самые заказываемые блюда по мнению наших гостей</p>
+    </div>
+    <div class="menu-tabs">
+      <button class="menu-tab active">Все</button>
+      <button class="menu-tab">Роллы</button>
+      <button class="menu-tab">Запечённые</button>
+      <button class="menu-tab">Сеты</button>
+      <button class="menu-tab">Суши</button>
+    </div>
+    <div class="products-grid reveal" id="productsGrid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80" alt="Филадельфия">
+          <div class="product-badge">🔥 Хит</div>
+        </div>
+        <div class="product-body">
+          <div class="product-weight">280 г · 8 шт</div>
+          <div class="product-name">Филадельфия</div>
+          <div class="product-ingr">Лосось, сливочный сыр Philadelphia, огурец, рис, нори</div>
+          <div class="product-footer">
+            <div class="product-price">549 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Филадельфия', 549, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" alt="Калифорния">
+          <div class="product-badge">🍣 Классика</div>
+        </div>
+        <div class="product-body">
+          <div class="product-weight">260 г · 8 шт</div>
+          <div class="product-name">Калифорния</div>
+          <div class="product-ingr">Краб, авокадо, огурец, икра тобико, рис, нори</div>
+          <div class="product-footer">
+            <div class="product-price">479 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Калифорния', 479, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=600&q=80" alt="Запечённый лосось">
+          <div class="product-badge">✨ Новинка</div>
+        </div>
+        <div class="product-body">
+          <div class="product-weight">290 г · 8 шт</div>
+          <div class="product-name">Запечённый лосось</div>
+          <div class="product-ingr">Лосось, сыр, спайси соус, кунжут, рис, нори</div>
+          <div class="product-footer">
+            <div class="product-price">589 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Запечённый лосось', 589, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=600&q=80" alt="Темпура ролл">
+        </div>
+        <div class="product-body">
+          <div class="product-weight">310 г · 8 шт</div>
+          <div class="product-name">Темпура ролл</div>
+          <div class="product-ingr">Тигровая креветка, авокадо, сыр, темпурная крошка</div>
+          <div class="product-footer">
+            <div class="product-price">619 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Темпура ролл', 619, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?w=600&q=80" alt="Сет Премиум">
+          <div class="product-badge">⭐ Топ</div>
+        </div>
+        <div class="product-body">
+          <div class="product-weight">980 г · 32 шт</div>
+          <div class="product-name">Сет Премиум</div>
+          <div class="product-ingr">Филадельфия, Калифорния, Дракон, Запечённый лосось</div>
+          <div class="product-footer">
+            <div class="product-price">1 790 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Сет Премиум', 1790, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://images.unsplash.com/photo-1582450871972-ab5ca641643d?w=600&q=80" alt="Сет Вани">
+          <div class="product-badge">👑 Авторский</div>
+        </div>
+        <div class="product-body">
+          <div class="product-weight">1200 г · 40 шт</div>
+          <div class="product-name">Сет Вани</div>
+          <div class="product-ingr">Лучшая авторская подборка: 5 видов роллов + суши + темпура</div>
+          <div class="product-footer">
+            <div class="product-price">2 390 <span>₽</span></div>
+            <button class="btn-cart" onclick="addToCart('Сет Вани', 2390, this)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROMOS ─── -->
+<section class="promos" id="promos">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag" style="background:rgba(255,112,67,.15);color:var(--orange)"><i class="fas fa-percent"></i> Акции</div>
+      <h2 class="section-title">Выгодные предложения</h2>
+    </div>
+    <div class="promo-grid reveal">
+      <div class="promo-card">
+        <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=700&q=80" alt="Скидка 20%">
+        <div class="promo-overlay">
+          <div class="promo-tag">Для новых</div>
+          <div class="promo-title">Скидка 20% на первый заказ</div>
+          <div class="promo-sub">Введите промокод ВАНИ20 при заказе</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=700&q=80" alt="Ролл в подарок">
+        <div class="promo-overlay">
+          <div class="promo-tag">🎁 Подарок</div>
+          <div class="promo-title">Ролл «Аляска» в подарок от 1500 ₽</div>
+          <div class="promo-sub">Автоматически при оформлении заказа</div>
+        </div>
+      </div>
+      <div class="promo-card">
+        <img src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?w=700&q=80" alt="Бесплатная доставка">
+        <div class="promo-overlay">
+          <div class="promo-tag">🚚 Доставка</div>
+          <div class="promo-title">Бесплатная доставка от 999 ₽</div>
+          <div class="promo-sub">Доставляем за 45 минут, работаем ежедневно</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHY US ─── -->
+<section class="why" id="delivery">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag"><i class="fas fa-heart"></i> Почему мы</div>
+      <h2 class="section-title">Почему выбирают<br>Суши от Вани</h2>
+      <p class="section-sub">Каждый ролл — это наша репутация. Поэтому мы не идём на компромисс с качеством</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-leaf"></i></div>
+        <h3>Свежие продукты</h3>
+        <p>Лосось и морепродукты поставляются ежедневно. Работаем только с проверенными поставщиками.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Быстрая доставка</h3>
+        <p>Доставим за 45 минут или вернём деньги. Курьеры работают по всему городу.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-industry"></i></div>
+        <h3>Собственное производство</h3>
+        <p>Готовим на своей кухне под строгим контролем ХАССП. Только после заказа.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Контроль качества</h3>
+        <p>Каждая позиция проверяется перед отправкой. Никаких компромиссов с безопасностью.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-users"></i></div>
+        <h3>Более 10 000 клиентов</h3>
+        <p>Доверяют нам семьи, компании и корпоративные клиенты по всему городу.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fas fa-clock"></i></div>
+        <h3>Работаем ежедневно</h3>
+        <p>С 10:00 до 23:00 без выходных. Принимаем заказы онлайн и по телефону.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number"><span class="counter" data-to="10000">0</span><span>+</span></div>
+        <div class="stat-label">выполненных заказов</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" style="display:flex;align-items:baseline;justify-content:center;gap:2px"><span class="counter" data-to="4" data-decimal="1" data-step="0.1">0</span><span style="font-size:28px">.9</span></div>
+        <div class="stat-label">средний рейтинг</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span class="counter" data-to="45">0</span><span> мин</span></div>
+        <div class="stat-label">среднее время доставки</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number"><span class="counter" data-to="7">0</span><span> лет</span></div>
+        <div class="stat-label">на рынке доставки</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── REVIEWS ─── -->
+<section id="reviews">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag"><i class="fas fa-star"></i> Отзывы</div>
+      <h2 class="section-title">Гости о нас</h2>
+      <p class="section-sub">Более 2400 отзывов на Яндекс.Картах и Google Maps</p>
+    </div>
+    <div class="reviews-grid reveal">
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=47" alt="Анна" class="review-avatar">
+          <div>
+            <div class="review-name">Анна Кузнецова</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="review-text">Заказываем каждую пятницу уже больше года! Роллы всегда свежие, доставка стабильно в районе 40 минут. Сет Вани — это вообще что-то невероятное, рекомендую всем.</div>
+        <div class="review-date">15 мая 2025</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=12" alt="Дмитрий" class="review-avatar">
+          <div>
+            <div class="review-name">Дмитрий Попов</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="review-text">Лучшая Филадельфия в городе — без преувеличений. Лосось тает во рту, порция большая. Попробовали с женой три разных сервиса, вернулись сюда и больше не уходим.</div>
+        <div class="review-date">3 мая 2025</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=23" alt="Марина" class="review-avatar">
+          <div>
+            <div class="review-name">Марина Смирнова</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="review-text">Заказывала на день рождения Сет Премиум на 6 человек. Все были в восторге! Всё привезли вовремя, красиво упаковано. Менеджер сам перезвонил уточнить адрес — приятно.</div>
+        <div class="review-date">28 апреля 2025</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=5" alt="Алексей" class="review-avatar">
+          <div>
+            <div class="review-name">Алексей Фёдоров</div>
+            <div class="stars">★★★★☆</div>
+          </div>
+        </div>
+        <div class="review-text">Темпура ролл — абсолютный фаворит. Хрустящая корочка, сочная начинка. Один раз задержали на 15 минут, но зато принесли купон на скидку. Уважаю такой подход.</div>
+        <div class="review-date">20 апреля 2025</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=56" alt="Ольга" class="review-avatar">
+          <div>
+            <div class="review-name">Ольга Николаева</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="review-text">Попробовала по промокоду со скидкой 20% — теперь постоянный клиент. Запечённый лосось просто космос. Большие порции, доступные цены, быстро. Что ещё надо?</div>
+        <div class="review-date">12 апреля 2025</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <img src="https://i.pravatar.cc/100?img=33" alt="Иван" class="review-avatar">
+          <div>
+            <div class="review-name">Иван Морозов</div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="review-text">Работаю в офисе рядом, заказываем на весь отдел. Всегда точно, всегда вкусно. Ребята из службы доставки очень вежливые. Спасибо Ване за крутые роллы!</div>
+        <div class="review-date">5 апреля 2025</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACTS ─── -->
+<section class="contacts" id="contacts">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag"><i class="fas fa-map-marker-alt"></i> Контакты</div>
+      <h2 class="section-title">Свяжитесь с нами</h2>
+      <p class="section-sub">Звоните, пишите или приезжайте — всегда рады</p>
+    </div>
+    <div class="contacts-grid reveal">
+      <div class="contacts-info">
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="contact-label">Адрес</div>
+            <div class="contact-value">ул. Роллов, 7, офис 4<br><small style="color:var(--gray3);font-weight:500">Доставка по всему городу</small></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="contact-label">Телефон</div>
+            <div class="contact-value"><a href="tel:+78001234567">8 800 123-45-67</a><br><small style="color:var(--gray3);font-weight:500">Звонок бесплатный</small></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value"><a href="mailto:info@sushi-vani.ru">info@sushi-vani.ru</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="contact-label">Часы работы</div>
+            <div class="contact-value">Ежедневно 10:00 — 23:00<br><small style="color:var(--gray3);font-weight:500">Без выходных и праздников</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <img src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?w=800&q=70" alt="Карта" style="filter:saturate(0.5)">
+        <div class="map-pin"><i class="fas fa-utensils"></i></div>
+        <div style="position:absolute;bottom:20px;left:20px;background:white;padding:12px 18px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-weight:700;font-size:14px">
+          📍 Суши от Вани — ул. Роллов, 7
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-logo-col">
+        <a href="#" class="logo">
+          <svg width="40" height="40" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="22" fill="#E53935"/>
+            <circle cx="22" cy="22" r="10" fill="white"/>
+            <circle cx="22" cy="22" r="6.5" fill="#E53935"/>
+            <circle cx="22" cy="22" r="3" fill="white"/>
+            <circle cx="27" cy="19" r="1.4" fill="#FF7043"/>
+            <circle cx="24.5" cy="16.5" r="1.2" fill="#FF7043"/>
+            <line x1="30" y1="8" x2="38" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <line x1="33" y1="6" x2="40" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 22 Q22 28 31 22" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="logo-text">
+            <span>доставка</span>
+            <span>Суши от <em>Вани</em></span>
+          </div>
+        </a>
+        <p>Свежие суши и роллы с доставкой за 45 минут. Готовим только после заказа, используем ингредиенты высшего качества.</p>
+        <div class="socials">
+          <a href="#" class="social-btn"><i class="fab fa-vk"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Меню</h4>
+        <a href="#menu">Роллы</a>
+        <a href="#menu">Запечённые роллы</a>
+        <a href="#menu">Сеты</a>
+        <a href="#menu">Суши</a>
+        <a href="#menu">Пицца</a>
+        <a href="#menu">Напитки</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>О нас</h4>
+        <a href="#promos">Акции</a>
+        <a href="#delivery">Доставка</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#contacts">Контакты</a>
+        <a href="#">Вакансии</a>
+        <a href="#">О ресторане</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <a href="tel:+78001234567"><i class="fas fa-phone" style="margin-right:6px;color:var(--red)"></i>8 800 123-45-67</a>
+        <a href="mailto:info@sushi-vani.ru"><i class="fas fa-envelope" style="margin-right:6px;color:var(--red)"></i>info@sushi-vani.ru</a>
+        <a href="#"><i class="fas fa-clock" style="margin-right:6px;color:var(--red)"></i>10:00 – 23:00 ежедневно</a>
+        <a href="#contacts"><i class="fas fa-map-marker-alt" style="margin-right:6px;color:var(--red)"></i>ул. Роллов, 7</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2025 Суши от Вани. Все права защищены.</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Пользовательское соглашение</a>
+        <a href="#">Оферта</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── CART DRAWER ─── -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-bag" style="color:var(--red);margin-right:8px"></i>Корзина</h3>
+    <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <i class="fas fa-shopping-bag"></i>
+      <span>Корзина пуста</span>
+      <small>Добавьте что-нибудь вкусное!</small>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>Итого:</span>
+      <span id="cartTotal">0 ₽</span>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">
+      <i class="fas fa-check" style="margin-right:8px"></i>Оформить заказ
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+<script>
+// ─── CART ───
+let cart = [];
+
+function addToCart(name, price, btn) {
+  const img = btn.closest('.product-card').querySelector('img').src;
+  const existing = cart.find(i => i.name === name);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ name, price, qty: 1, img });
+  }
+  btn.classList.add('added');
+  setTimeout(() => btn.classList.remove('added'), 400);
+  updateCart();
+  showToast(name + ' добавлен в корзину');
+}
+
+function updateCart() {
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+
+  const countEl = document.getElementById('cartCount');
+  countEl.textContent = count;
+  countEl.classList.toggle('visible', count > 0);
+
+  const itemsEl = document.getElementById('cartItems');
+  const emptyEl = document.getElementById('cartEmpty');
+  const footerEl = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    emptyEl.style.display = 'flex';
+    footerEl.style.display = 'none';
+    itemsEl.innerHTML = '';
+    itemsEl.appendChild(emptyEl);
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  footerEl.style.display = 'block';
+  document.getElementById('cartTotal').textContent = total.toLocaleString('ru') + ' ₽';
+
+  itemsEl.innerHTML = cart.map((item, idx) => `
+    <div class="cart-item">
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${(item.price * item.qty).toLocaleString('ru')} ₽</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${idx})"><i class="fas fa-trash"></i></button>
+    </div>
+  `).join('');
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  updateCart();
+}
+
+function removeItem(idx) {
+  cart.splice(idx, 1);
+  updateCart();
+}
+
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function checkout() {
+  showToast('Заказ принят! Скоро перезвоним 🎉');
+  cart = [];
+  updateCart();
+  toggleCart();
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─── MOBILE MENU ───
+function toggleMobile() {
+  document.getElementById('burger').classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+}
+
+// ─── MENU TABS ───
+document.querySelectorAll('.menu-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// ─── SCROLL REVEAL ───
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── COUNTERS ───
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.counter').forEach(el => {
+        const target = parseInt(el.dataset.to);
+        const duration = 1600;
+        const step = duration / target;
+        let current = 0;
+        const timer = setInterval(() => {
+          current += Math.ceil(target / 60);
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = current.toLocaleString('ru');
+        }, 1000 / 60);
+      });
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stats').forEach(el => counterObserver.observe(el));
+
+// ─── HEADER SHADOW ON SCROLL ───
+window.addEventListener('scroll', () => {
+  document.getElementById('header').style.boxShadow =
+    window.scrollY > 10 ? '0 4px 30px rgba(0,0,0,.12)' : '0 2px 20px rgba(0,0,0,.08)';
+});
+</script>
+</body>
+</html>
